@@ -1,0 +1,11 @@
+.navbar-brand {
+    font-family: 'Kdam Thmor Pro', sans-serif;
+}
+
+.nav-link.header-link {
+    font-size: 150%;
+}
+
+.nav-link.header-link:hover {
+    text-decoration: underline;
+}
