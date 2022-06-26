@@ -1,44 +1,89 @@
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import *
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user,current_user
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import InputRequired, Length, ValidationError
+from flask_bcrypt import Bcrypt
 
 
 app = Flask(__name__)
-
-ENV = 'dev'
-
-if ENV == 'prod':
-    app.debug = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost/postgres'
-else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://klrefwtxuudiqb:e91127fd686e6cd4e578798df2dd69a1f8f8d7fc383bfd39610897cacb6a97db@ec2-54-157-16-196.compute-1.amazonaws.com:5432/d1gd12496no4uv'
-
- 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+ENV = 'dev'
+ 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SECRET_KEY'] = 'harrytong'
 
-class Player(db.Model):
-    __tablename__ = 'stats'
-    name = db.Column(db.VARCHAR(40))
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class User(db.Model, UserMixin):
+
     id = db.Column(db.INT, primary_key = True)
-    ppg = db.Column(db.VARCHAR(10))
-    apg = db.Column(db.VARCHAR(10))
-    rpg = db.Column(db.VARCHAR(10))
-    url = db.Column(db.VARCHAR(100))
+    name = db.Column(db.String(40), nullable=False, unique = True)
+    password = db.Column(db.String(100), nullable=False)
 
-    def __init__(self, name, ppg, apg, rpg, url):
-        self.name = name
-        self.ppg = ppg
-        self.apg = apg
-        self.rpg = rpg
-        self.url = url
+class RegisterForm(FlaskForm):
+    username = StringField(validators = [InputRequired(), Length(min = 4, max = 20)], render_kw = {"placeholder" : "Username"})
+    password = PasswordField(validators = [InputRequired(), Length(min = 4, max = 20)], render_kw = {"placeholder" : "Password"})
 
+    submit = SubmitField("Register")
+    
 
+    def check_user(self, username):
+        existing_user = User.query.filter_by(username = username.data).first()
+        if existing_user:
+            raise ValidationError("User already exists")
+
+class LoginForm(FlaskForm):
+    username = StringField(validators = [InputRequired(), Length(min = 4, max = 20)], render_kw = {"placeholder" : "Username"})
+    password = PasswordField(validators = [InputRequired(), Length(min = 4, max = 20)], render_kw = {"placeholder" : "Password"})
+
+    submit = SubmitField("Login")
+    
 @app.route('/', methods = ['POST', 'GET'])
 
 def index():
 
-    return render_template('index.html')
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(name = form.username.data).first()
+        if (user):
+            if bcrypt.check_password_hash(user.password, form.password.data):
+                login_user(user)
+                return redirect(url_for('dash'))
+
+    return render_template('index.html', form = form)
+
+@app.route('/register', methods = ['POST', 'GET'])
+
+def register():
+
+    form = RegisterForm()
+
+    if form.validate_on_submit():
+
+        hashed =  bcrypt.generate_password_hash(form.password.data)
+        new_user = User(name = form.username.data, password = hashed)
+        db.session.add(new_user)
+        db.session.commit()
+
+        return redirect(url_for('index'))
+
+    return render_template('register.html', form = form)
+
+@app.route('/dash', methods = ['POST', 'GET'])
+@login_required
+def dash():
+    return render_template('dash.html')
 
 if __name__ == "__main__":
     app.run(debug = True)
