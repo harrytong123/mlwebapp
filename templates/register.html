@@ -6,15 +6,41 @@
 {% endblock %}
 
 {% block body %}
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" style="font-size: 300%; color:antiquewhite;"
+            href="{{url_for('index')}}">MYAPP</a>
+        <div class="navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link header-link" href="{{url_for('register')}}">Register</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
 <header>
-    <div>
-        <h1>Register Now!</h1>
-        <form method = "POST">
+
+    <div class = "center">
+
+        <h1 style = "padding-top: 15px;">Register Now!</h1>
+
+        <form method = "POST" autocomplete="off">
+
             {{ form.hidden_tag() }}
-            {{ form.username }}
-            {{ form.password }}
-            {{ form.submit }}
-            
+
+            <div class = "txt_field">
+                {{ form.username }}
+                <label>Username</label>
+            </div>
+
+            <div class = "txt_field">
+                {{ form.password }}
+                <label>Password</label>
+            </div>
+            <div class = "sub">
+                {{ form.submit }}
+            </div>
         </form>
 
     </div>

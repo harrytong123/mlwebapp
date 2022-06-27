@@ -17,7 +17,7 @@ app.config['SECRET_KEY'] = 'harrytong'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "login"
+login_manager.login_view = "index"
 
 
 @login_manager.user_loader
@@ -43,8 +43,8 @@ class RegisterForm(FlaskForm):
             raise ValidationError("User already exists")
 
 class LoginForm(FlaskForm):
-    username = StringField(validators = [InputRequired(), Length(min = 4, max = 20)], render_kw = {"placeholder" : "Username"})
-    password = PasswordField(validators = [InputRequired(), Length(min = 4, max = 20)], render_kw = {"placeholder" : "Password"})
+    username = StringField(validators = [InputRequired(), Length(min = 4, max = 20)])
+    password = PasswordField(validators = [InputRequired(), Length(min = 4, max = 20)])
 
     submit = SubmitField("Login")
     
@@ -84,6 +84,38 @@ def register():
 @login_required
 def dash():
     return render_template('dash.html')
+
+
+@app.route('/logout', methods = ['POST', 'GET'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+@app.route('/admin', methods = ['POST', 'GET'])
+@login_required
+def admin():
+    id = current_user.id
+    if (id == 1):
+        users = User.query.order_by(User.id).all()
+        return render_template('admin.html', users = users)
+    else:
+        return "Not authorized"
+
+@app.route('/delete/<int:id>')
+def delete(id):
+
+    if (id == 1):
+        return 'Cannot delete'
+
+    user_to_delete = User.query.get_or_404(id)
+
+    try:
+        db.session.delete(user_to_delete)
+        db.session.commit()
+        return redirect(url_for('admin'))
+    except:
+        return 'There was a problem deleting the user'
 
 if __name__ == "__main__":
     app.run(debug = True)

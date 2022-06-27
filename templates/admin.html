@@ -10,22 +10,25 @@
 
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" style="font-size: 300%; color:antiquewhite;"
-                href="{{url_for('index')}}">MYAPP</a>
+            <a class="navbar-brand" style="font-size: 300%; color:antiquewhite;" href="{{url_for('index')}}">MYAPP</a>
             <div class="navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    {% if current_user.id == 1 %}
-                    <a class="nav-link header-link" href="{{url_for('admin')}}">Admin</a>
-                    {% endif %}
                     <a class="nav-link header-link" href="{{url_for('logout')}}">Logout</a>
                 </div>
             </div>
         </div>
     </nav>
-    
-    <div class = "center">
 
+    <div>
+        {% for person in users %}
+        <div style = "padding-bottom: 10px; padding-left: 28%;">
 
+            <div class = "person_label">
+                <p> {{ person.name }} </p>
+                <a href="{{ url_for('delete', id = person.id) }}">Delete</a>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </header>
 {% endblock %}
