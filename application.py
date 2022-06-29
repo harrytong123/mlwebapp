@@ -7,16 +7,16 @@ from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
 
 
-app = Flask(__name__)
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
+application = Flask(__name__)
+db = SQLAlchemy(application)
+bcrypt = Bcrypt(application)
 ENV = 'dev'
  
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SECRET_KEY'] = 'harrytong'
+application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://tongharry:Tw042565?@mydb.cagovpenmcir.us-west-1.rds.amazonaws.com/userdatabase'
+application.config['SECRET_KEY'] = 'harrytong'
 
 login_manager = LoginManager()
-login_manager.init_app(app)
+login_manager.init_app(application)
 login_manager.login_view = "index"
 
 
@@ -48,7 +48,7 @@ class LoginForm(FlaskForm):
 
     submit = SubmitField("Login")
     
-@app.route('/', methods = ['POST', 'GET'])
+@application.route('/', methods = ['POST', 'GET'])
 
 def index():
 
@@ -63,7 +63,7 @@ def index():
 
     return render_template('index.html', form = form)
 
-@app.route('/register', methods = ['POST', 'GET'])
+@application.route('/register', methods = ['POST', 'GET'])
 
 def register():
 
@@ -80,33 +80,33 @@ def register():
 
     return render_template('register.html', form = form)
 
-@app.route('/dash', methods = ['POST', 'GET'])
+@application.route('/dash', methods = ['POST', 'GET'])
 @login_required
 def dash():
     return render_template('dash.html')
 
 
-@app.route('/logout', methods = ['POST', 'GET'])
+@application.route('/logout', methods = ['POST', 'GET'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/admin', methods = ['POST', 'GET'])
+@application.route('/admin', methods = ['POST', 'GET'])
 @login_required
 def admin():
     id = current_user.id
     if (id == 1):
         users = User.query.order_by(User.id).all()
-        return render_template('admin.html', users = users)
+        return render_template('admin.html', users = users[1:])
     else:
         return "Not authorized"
 
-@app.route('/delete/<int:id>')
+@application.route('/delete/<int:id>')
 def delete(id):
 
     if (id == 1):
-        return 'Cannot delete'
+        return "Cannot Delete"
 
     user_to_delete = User.query.get_or_404(id)
 
@@ -118,4 +118,4 @@ def delete(id):
         return 'There was a problem deleting the user'
 
 if __name__ == "__main__":
-    app.run(debug = True)
+    application.run()
