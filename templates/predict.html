@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<header>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" style="font-size: 300%; color:antiquewhite;" href="{{url_for('index')}}">MYAPP</a>
+            <div class="navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    {% if current_user.id == 1 %}
+                    <a class="nav-link header-link" href="{{url_for('admin')}}">Admin</a>
+                    {% endif %}
+                    <a class="nav-link header-link" href="{{url_for('logout')}}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="centerdash">
+
+        <h1 style="padding-top: 20px">Salary Calculated Using</h1>
+
+        <h2>Linear Regression:</h2>
+
+        <p>${{linear}} Per Year</p>
+
+        <h2>Decision Tree Regressor:</h2>
+
+        <p>${{decision}} Per Year</p>
+
+        <a href="{{url_for('dash')}}">
+            <input type="submit" value = "Go Back"/>
+          </a>
+
+    </div>
+
+
+    </div>
+</header>
+{% endblock %}

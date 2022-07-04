@@ -3,8 +3,7 @@
 }
 
 .navbar-brand:hover {
-    text-shadow: 4px 4px grey;
-    -webkit-text-stroke: 1px black;
+    text-shadow: 4px 4px black;
 }
 
 .nav-link.header-link {
@@ -15,13 +14,65 @@
 
 .nav-link.header-link:hover {
     text-shadow: 2px 2px grey;
-    -webkit-text-stroke: 1px black;
 }
 
 body{
     margin: 0;
     padding: 0;
     
+}
+
+
+.centerdash{
+    position:absolute;
+    top: 55%;
+    bottom:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 500px;
+    height: 350px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px grey;
+    text-align: center;
+}
+
+.centerdash h1{
+    text-align: center;
+    padding: 0 0 20px 0;
+    border-bottom: 1px solid silver;
+    font-family: 'Kdam Thmor Pro', sans-serif;
+    text-shadow: 2px 2px 2px grey;
+}
+
+.centerdash h2{
+    font-family: 'Kdam Thmor Pro', sans-serif;
+}
+
+.centerdash p{
+    font-family: 'Kdam Thmor Pro', sans-serif;
+    font-size: large;
+}
+
+
+.centerdash select{
+    width: 50%; 
+    font-size: large; 
+    border: 3px solid black;
+    font-family: 'Kdam Thmor Pro', sans-serif;
+    background-color: antiquewhite;
+    box-shadow: 3px 3px 3px grey;
+}
+
+.centerdash label{
+    font-size: 150%;
+    font-family: 'Kdam Thmor Pro', sans-serif;
+    margin-right: 3%;
+}
+
+.centerdash #yoe{
+    margin-top: 7.5%;
 }
 
 .center{
@@ -36,6 +87,7 @@ body{
     background: white;
     border-radius: 10px;
     box-shadow: 0px 0px 10px grey;
+    text-align: center;
 }
 
 .center h1{
@@ -80,7 +132,7 @@ form .txt_field{
 }
 
 input[type = "submit"]{
-    width: 100%;
+    width: 60%;
     height: 50px;
     border: 1px solid;
     background: antiquewhite;
@@ -88,11 +140,12 @@ input[type = "submit"]{
     font-size: 20px;
     color: black;
     appearance: none;
+    font-family: 'Kdam Thmor Pro', sans-serif;
 }
 
+
 input[type = "submit"]:hover{
-    
-    background: transparent;
+    box-shadow: 0px 0px 10px grey;
 }
 
 .person_label{
@@ -125,3 +178,4 @@ input[type = "submit"]:hover{
     background-color: antiquewhite;
     color: black;
 }
+

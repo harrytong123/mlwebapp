@@ -3,6 +3,14 @@
 
 {% block head %}
 
+<script>
+
+    function updateTextInput(val) {
+        document.getElementById('textInput').innerText = val;
+    }
+
+</script>
+
 {% endblock %}
 
 {% block body %}
@@ -10,8 +18,7 @@
 
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" style="font-size: 300%; color:antiquewhite;"
-                href="{{url_for('index')}}">MYAPP</a>
+            <a class="navbar-brand" style="font-size: 300%; color:antiquewhite;" href="{{url_for('index')}}">MYAPP</a>
             <div class="navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     {% if current_user.id == 1 %}
@@ -22,8 +29,41 @@
             </div>
         </div>
     </nav>
-    
-    <div class = "center">
+
+    <div class="centerdash">
+
+        <h1 style="padding-top: 20px">Predict Salary!</h1>
+
+        <form method="POST" autocomplete="off" autocapitalize="off" style="padding-top: 10px;">
+            <label for="loc">Location: </label>
+            <select name="location" id="loc">
+                <option value="Default">--Please Select Location--</option>
+                <option value="austin">Austin</option>
+                <option value="boston">Boston</option>
+                <option value="canada">Canada</option>
+                <option value="chicago">Chicago</option>
+                <option value="london">London</option>
+                <option value="los angeles">Los Angeles</option>
+                <option value="menlo park">Menlo Park</option>
+                <option value="new york">New York</option>
+                <option value="redmond">Redmond</option>
+                <option value="san francisco">San Francisco</option>
+                <option value="santa clara">Santa Clara</option>
+                <option value="seattle">Seattle</option>
+                <option value="US">Other US Location</option>
+                <option value="int">Other International</option>
+                <option value="Other">Other (Less Accurate)</option>
+            </select>
+
+            <label for="yoe">Years of Experience: </label>
+            <input type="range" name = "yearsofexp" min="0" max="20" value="10" class="slider" id="yoe" onchange="updateTextInput(this.value);">
+            <p id = "textInput" style = "font-size: 150%;  font-family: 'Kdam Thmor Pro', sans-serif; color: #2F4858;">10</p>
+
+            <input type = "submit">
+
+        </form>
+
+    </div>
 
 
     </div>
