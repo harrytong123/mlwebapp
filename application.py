@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_sqlalchemy import *
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -15,7 +15,7 @@ import numpy as np
 application = Flask(__name__)
 db = SQLAlchemy(application)
 bcrypt = Bcrypt(application)
-ENV = 'dev'
+
 
 application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://tongharry:Tw042565?@mydb.cagovpenmcir.us-west-1.rds.amazonaws.com/userdatabase'
 application.config['SECRET_KEY'] = 'harrytong'
@@ -41,9 +41,22 @@ def load_user(user_id):
 
 class User(db.Model, UserMixin):
 
+    __tablename__  = 'user'
+
     id = db.Column(db.INT, primary_key=True)
     name = db.Column(db.String(40), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
+
+class Posts(db.Model):
+
+    __tablename__ = 'posts'
+
+    PostID = db.Column(db.INT, nullable = False, primary_key = True)
+    id = db.Column(db.INT, db.ForeignKey('user.id'), nullable = False)
+    company = db.Column(db.String(40), nullable = False)
+    base_salary = db.Column(db.INT, nullable = False)
+    bonus_salary = db.Column(db.INT, nullable = False)
+    date_posted = db.Column(db.Date, nullable = False)
 
 
 class RegisterForm(FlaskForm):
@@ -78,7 +91,8 @@ def index():
         if (user):
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
-                return redirect(url_for('dash'))
+                flash("Hello World")
+                return redirect(url_for('predict'))
 
     return render_template('index.html', form=form)
 
@@ -100,15 +114,15 @@ def register():
     return render_template('register.html', form=form)
 
 
-@application.route('/dash', methods=['POST', 'GET'])
+@application.route('/predict', methods=['POST', 'GET'])
 @login_required
-def dash():
+def predict():
 
     if request.method == 'POST':
         location = request.form['location']
         
         if (location == "Default"):
-            return render_template('dash.html')
+            return render_template('predict.html')
         years = request.form['yearsofexp']
 
         submission = np.array([[location, float(years)]])
@@ -121,10 +135,18 @@ def dash():
         roundlpredict = int(math.ceil(linpredict/1000) * 1000)
         rounddecpredict = int(math.ceil(decpredict/1000) * 1000)
 
-        return render_template('predict.html', linear = str(roundlpredict), decision = str(rounddecpredict))
+        return render_template('results.html', linear = str(roundlpredict), decision = str(rounddecpredict))
 
     else:
-        return render_template('dash.html')
+        return render_template('predict.html')
+
+
+@application.route('/forum', methods = ['POST', 'GET'])
+@login_required
+def forum():
+
+    posts = Posts.query.order_by(Posts.PostID).all()
+    return render_template('forum.html', posts = posts)
 
 
 @application.route('/logout', methods = ['POST', 'GET'])

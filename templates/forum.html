@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<header>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" style="font-size: 300%; color:antiquewhite;" href="{{url_for('index')}}">MYAPP</a>
+            <div class="navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link header-link" href="{{url_for('logout')}}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <br>
+
+    <div>
+        {% for post in posts %}
+        <div style = "padding-bottom: 10px; padding-left: 28%;">
+
+            <div class = "person_label">
+                <p> {{ post.PostID }} </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</header>
+{% endblock %}
