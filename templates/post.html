@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+
+<script>
+
+    function updateTextInput(val) {
+        document.getElementById('textInput').innerText = val;
+    }
+
+</script>
+
+{% endblock %}
+
+{% block body %}
+<header>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" style="font-size: 300%; color:antiquewhite;" href="{{url_for('forum')}}">MYAPP</a>
+            <div class="navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    {% if current_user.id == 1 %}
+                    <a class="nav-link header-link" href="{{url_for('admin')}}">Admin</a>
+                    {% endif %}
+                    <a class="nav-link header-link" href="{{url_for('predict')}}">Predict</a>
+                    <a class="nav-link header-link" href="{{url_for('logout')}}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="centerdash">
+
+        <h1 style="padding-top: 20px">Post!</h1>
+
+        <form method="POST" autocomplete="off" autocapitalize="off" style="padding-top: 10px;">
+
+            <div style = "margin-bottom: 3%;">
+                <label for="company">Company: </label>
+                <input class = "post_input" name = "company" id="company" type="text">
+            </div>
+
+
+            <div style = "margin-bottom: 3%;">
+                <label for="base">Base Salary: </label>
+                <input class = "post_input" name = "base_salary" id="base" type="text" placeholder = "Enter Whole Number">
+            </div>
+
+            <div style = "margin-bottom: 3%;">
+                <label for="bonus">Bonus Salary: </label>
+                <input class = "post_input" name = "bonus_salary" id="base" type="text" placeholder = "Enter Whole Number">
+            </div>
+
+            <input style = "margin-top: 2%;" type = "Submit" value = "Post!">
+
+
+        </form>
+
+    </div>
+
+
+    </div>
+</header>
+{% endblock %}

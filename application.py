@@ -10,7 +10,7 @@ from sklearn.linear_model import LinearRegression
 import pickle
 import math
 import numpy as np
-
+from datetime import date
 
 application = Flask(__name__)
 db = SQLAlchemy(application)
@@ -92,7 +92,7 @@ def index():
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
                 flash("Hello World")
-                return redirect(url_for('predict'))
+                return redirect(url_for('forum'))
 
     return render_template('index.html', form=form)
 
@@ -146,8 +146,36 @@ def predict():
 def forum():
 
     posts = Posts.query.order_by(Posts.PostID).all()
-    return render_template('forum.html', posts = posts)
+    users = users = User.query.order_by(User.id).all()
+    idname = {}
+    for user in users:
+        idname[user.id] = user.name
+    return render_template('forum.html', posts = posts, idname = idname)
 
+@application.route('/post', methods=['POST', 'GET'])
+def post():
+
+
+    if request.method == 'POST':
+
+        new_company = request.form['company']
+        new_base_salary = request.form['base_salary']
+        new_bonus_salary = request.form['bonus_salary']
+
+        if (new_base_salary.isnumeric() == False):
+            return "Base Salary must be an integer"
+        
+        if (new_bonus_salary.isnumeric() == False):
+            return "Bonus Salary must be an integer"
+
+        new_post = Posts(id = current_user.id, company = new_company, base_salary = int(new_base_salary), bonus_salary = int(new_bonus_salary), date_posted = date.today())
+
+        db.session.add(new_post)
+        db.session.commit()
+        
+        return redirect(url_for('forum'))
+
+    return render_template('post.html')
 
 @application.route('/logout', methods = ['POST', 'GET'])
 @login_required
@@ -181,4 +209,4 @@ def delete(id):
         return 'There was a problem deleting the user'
 
 if __name__ == "__main__":
-    application.run()
+    application.run(debug=True)

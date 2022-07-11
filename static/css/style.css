@@ -25,7 +25,7 @@ body{
 
 .centerdash{
     position:absolute;
-    top: 55%;
+    top: 60%;
     bottom:50%;
     left:50%;
     transform: translate(-50%, -50%);
@@ -179,3 +179,10 @@ input[type = "submit"]:hover{
     color: black;
 }
 
+
+.post_input{
+    outline: 0;
+    border: none;
+    border-bottom: 1px solid black;
+    
+}
