@@ -152,7 +152,7 @@ input[type = "submit"]:hover{
     background-color: antiquewhite;
     padding-top: 5px;
     padding-bottom: 7px;
-    width: 60%;
+    width: 80%;
     text-align: center;
     border-radius: 20px;
     box-shadow: 10px 5px 5px gray;
@@ -184,5 +184,16 @@ input[type = "submit"]:hover{
     outline: 0;
     border: none;
     border-bottom: 1px solid black;
-    
+    width: 32.5%; 
+}
+
+
+.backbtn{
+    background-color: black;
+    color: antiquewhite;
+    text-decoration: none;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 3px solid black;
 }

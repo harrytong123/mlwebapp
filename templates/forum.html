@@ -18,6 +18,7 @@
                     {% endif %}
                     <a class="nav-link header-link" href="{{url_for('predict')}}">Predict</a>
                     <a class="nav-link header-link" href="{{url_for('logout')}}">Logout</a>
+                    <a class="nav-link header-link" href="{{url_for('post')}}">Post</a>
                 </div>
             </div>
         </div>
@@ -25,17 +26,18 @@
 
     <br>
 
+
     <div>
-        {% for post in posts %}
-        <div style = "padding-bottom: 20px; padding-left: 28%;">
+        
+        {% for post in posts|reverse %}
+        <div style = "padding-bottom: 20px; margin-left: 15%;">
 
             <div class = "person_label">
-                <p style = "font-size: 4vw; margin-bottom:-3px; letter-spacing: 0.5em; margin-left: 2%;"> {{ post.company }}</p>
-                <p style = "font-size: 1.5vw; margin-bottom: -1px;">Posted by: {{ idname[post.id] }}</p>
-                <p style = "font-size: 1.5vw;">{{post.date_posted}}</p>
-                <p style = "font-size: 2vw;">Base Salary: ${{post.base_salary}}</p> 
-                <p style = "font-size: 2vw;">Bonus Salary: ${{post.bonus_salary}}</p> 
-                <a href="{{url_for('predict')}}" style = "margin-top: -3px;">View Profile</a>
+                <p style = "font-size: 7vw; margin-bottom:-3px; letter-spacing: 0.5em; margin-left: 2%;"> {{ post.company }}</p>
+                <p style = "font-size: 2vw; margin-bottom: -1px;">Posted by: {{ idname[post.id] }}</p>
+                <p style = "font-size: 2vw;">{{post.date_posted}}</p>
+                <p style = "font-size: 3vw;">Base Salary: ${{post.base_salary}}</p> 
+                <p style = "font-size: 3vw;">Bonus Salary: ${{post.bonus_salary}}</p> 
             </div>
         </div>
         {% endfor %}

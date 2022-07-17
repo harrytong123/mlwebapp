@@ -3,6 +3,25 @@
 
 {% block head %}
 
+
+<script>
+
+    $(document).ready(function(){
+        $('.center').fadeIn(400, function(){
+            $('.txt_field').fadeIn(300, function(){
+                $('.sub').fadeIn();
+            });
+        });
+    });
+
+</script>
+
+<style>
+    .hidden{
+        display:none;
+    }
+</style>
+
 {% endblock %}
 
 {% block body %}
@@ -20,7 +39,7 @@
         </div>
     </nav>
     
-    <div class = "center">
+    <div class = "center hidden">
 
         <h1 style = "padding-top: 15px;">Login</h1>
 
@@ -28,16 +47,16 @@
 
             {{ form.hidden_tag() }}
 
-            <div class = "txt_field">
+            <div class = "txt_field hidden">
                 {{ form.username }}
                 <label>Username</label>
             </div>
 
-            <div class = "txt_field">
+            <div class = "txt_field hidden">
                 {{ form.password }}
                 <label>Password</label>
             </div>
-            <div class = "sub">
+            <div class = "sub hidden">
                 {{ form.submit }}
             </div>
         </form>

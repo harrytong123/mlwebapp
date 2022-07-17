@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, flash
+from flask import Flask, render_template, url_for, request, redirect, flash, jsonify
 from flask_sqlalchemy import *
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -20,7 +20,7 @@ bcrypt = Bcrypt(application)
 application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://tongharry:Tw042565?@mydb.cagovpenmcir.us-west-1.rds.amazonaws.com/userdatabase'
 application.config['SECRET_KEY'] = 'harrytong'
 
-login_manager = LoginManager()
+login_manager = LoginManager()  
 login_manager.init_app(application)
 login_manager.login_view = "index"
 
@@ -61,9 +61,9 @@ class Posts(db.Model):
 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(
-        min=4, max=20)], render_kw={"placeholder": "Username"})
+        min=4, max=20)])
     password = PasswordField(validators=[InputRequired(), Length(
-        min=4, max=20)], render_kw={"placeholder": "Password"})
+        min=4, max=20)])
 
     submit = SubmitField("Register")
 
@@ -118,29 +118,31 @@ def register():
 @login_required
 def predict():
 
-    if request.method == 'POST':
-        location = request.form['location']
+    return render_template('predict.html')
+
+
+@application.route('/process',  methods = ['POST'])
+def process():
+
+    location = request.form['location']
+    years = request.form['yoe']
         
-        if (location == "Default"):
-            return render_template('predict.html')
-        years = request.form['yearsofexp']
+    if (location == "Default"):
+        return jsonify({'error': "Please Select City!"})
 
-        submission = np.array([[location, float(years)]])
-        submission[:,0] = le_location.transform(submission[:,0])
-        submission = submission.astype(float)
+    submission = np.array([[location, float(years)]])
+    submission[:,0] = le_location.transform(submission[:,0])
+    submission = submission.astype(float)
 
-        linpredict = linear_predict.predict(submission).flat[0]
-        decpredict = decision_predict.predict(submission).flat[0]
+    linpredict = linear_predict.predict(submission).flat[0]
+    decpredict = decision_predict.predict(submission).flat[0]
 
-        roundlpredict = int(math.ceil(linpredict/1000) * 1000)
-        rounddecpredict = int(math.ceil(decpredict/1000) * 1000)
+    roundlpredict = int(math.ceil(linpredict/1000) * 1000)
+    rounddecpredict = int(math.ceil(decpredict/1000) * 1000)
 
-        return render_template('results.html', linear = str(roundlpredict), decision = str(rounddecpredict))
+    return jsonify({'linear' : str(roundlpredict), 'decision' : str(rounddecpredict)})
 
-    else:
-        return render_template('predict.html')
-
-
+ 
 @application.route('/forum', methods = ['POST', 'GET'])
 @login_required
 def forum():

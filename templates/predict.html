@@ -5,11 +5,62 @@
 
 <script>
 
-    function updateTextInput(val) {
-        document.getElementById('textInput').innerText = val;
-    }
+    $(document).ready(function () {
+
+        $('.centerdash.predict').fadeIn(800);
+
+        $(document).on('input', '#yoe', function () {
+            $('#textInput').html($(this).val());
+        });
+
+
+        $('form').on('submit', function (event) {
+
+            $.ajax({
+                data: {
+                    location: $('#loc option:selected').val(),
+                    yoe: $('#yoe').val()
+                },
+
+                type: 'POST',
+                url: '/process'
+            })
+                .done(function (data) {
+
+                    if (data.error) {
+                        alert(data.error);
+                    }
+
+                    else {
+                        $('#linear').text('$' + data.linear + ' per year');
+                        $('#tree').text('$' + data.decision + ' per year');
+                        $('.centerdash.predict').fadeOut(500, function () {
+                            $('.centerdash.results').fadeIn();
+                        });
+                    }
+
+                });
+
+            event.preventDefault();
+        })
+
+        $('#backbtn').click(function () {
+            $('.centerdash.results').fadeOut(500, function () {
+                $('.centerdash.predict').fadeIn();
+            });
+        })
+
+
+
+    });
 
 </script>
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
 
 {% endblock %}
 
@@ -31,11 +82,12 @@
         </div>
     </nav>
 
-    <div class="centerdash">
+    <div class="centerdash predict hidden">
 
         <h1 style="padding-top: 20px">Predict Salary!</h1>
 
-        <form method="POST" autocomplete="off" autocapitalize="off" style="padding-top: 10px;">
+        <form autocomplete="off" autocapitalize="off" style="padding-top: 10px;">
+
             <label for="loc">Location: </label>
             <select name="location" id="loc">
                 <option value="Default">--Please Select Location--</option>
@@ -57,12 +109,29 @@
             </select>
 
             <label for="yoe">Years of Experience: </label>
-            <input type="range" name = "yearsofexp" min="0" max="20" value="10" class="slider" id="yoe" onchange="updateTextInput(this.value);">
-            <p id = "textInput" style = "font-size: 150%;  font-family: 'Kdam Thmor Pro', sans-serif; color: #2F4858;">10</p>
+            <input type="range" name="yearsofexp" min="0" max="20" value="10" class="slider" id="yoe"
+                onchange="updateTextInput(this.value);">
+            <p id="textInput" style="font-size: 150%;  font-family: 'Kdam Thmor Pro', sans-serif; color: #2F4858;">10
+            </p>
 
-            <input type = "submit">
+            <input type="submit">
 
         </form>
+    </div>
+
+    <div class="centerdash results hidden">
+
+        <h1 style="padding-top: 20px">Salary Calculated Using</h1>
+
+        <h2>Linear Regression:</h2>
+
+        <p id="linear">$</p>
+
+        <h2>Decision Tree Regressor:</h2>
+
+        <p id="tree">$</p>
+
+        <button id="backbtn"">Go Back</button>
 
     </div>
 

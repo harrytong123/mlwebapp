@@ -5,11 +5,23 @@
 
 <script>
 
-    function updateTextInput(val) {
-        document.getElementById('textInput').innerText = val;
-    }
+    $(document).ready(function () {
+
+        $('.centerdash').fadeIn(800);
+
+        $(document).on('input', '#yoe', function () {
+            $('#textInput').html($(this).val());
+        });
+
+    });
 
 </script>
+
+<style>
+    .hidden{
+        display:none;
+    }
+</style>
 
 {% endblock %}
 
@@ -31,29 +43,29 @@
         </div>
     </nav>
 
-    <div class="centerdash">
+    <div class="centerdash hidden">
 
         <h1 style="padding-top: 20px">Post!</h1>
 
         <form method="POST" autocomplete="off" autocapitalize="off" style="padding-top: 10px;">
 
-            <div style = "margin-bottom: 3%;">
+            <div style="margin-bottom: 3%;">
                 <label for="company">Company: </label>
-                <input class = "post_input" name = "company" id="company" type="text">
+                <input class="post_input" name="company" id="company" type="text">
             </div>
 
 
-            <div style = "margin-bottom: 3%;">
+            <div style="margin-bottom: 3%;">
                 <label for="base">Base Salary: </label>
-                <input class = "post_input" name = "base_salary" id="base" type="text" placeholder = "Enter Whole Number">
+                <input class="post_input" name="base_salary" id="base" type="text" placeholder="Enter Whole Number">
             </div>
 
-            <div style = "margin-bottom: 3%;">
+            <div style="margin-bottom: 3%;">
                 <label for="bonus">Bonus Salary: </label>
-                <input class = "post_input" name = "bonus_salary" id="base" type="text" placeholder = "Enter Whole Number">
+                <input class="post_input" name="bonus_salary" id="base" type="text" placeholder="Enter Whole Number">
             </div>
 
-            <input style = "margin-top: 2%;" type = "Submit" value = "Post!">
+            <input style="margin-top: 2%;" type="Submit" value="Post!">
 
 
         </form>
