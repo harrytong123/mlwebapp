@@ -17,7 +17,7 @@ db = SQLAlchemy(application)
 bcrypt = Bcrypt(application)
 
 
-application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://tongharry:Tw042565?@mydb.cagovpenmcir.us-west-1.rds.amazonaws.com/userdatabase'
+application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://tongharry:XXXXXXX@mydb.cagovpenmcir.us-west-1.rds.amazonaws.com/userdatabase'
 application.config['SECRET_KEY'] = 'harrytong'
 
 login_manager = LoginManager()  
@@ -142,7 +142,6 @@ def process():
 
     return jsonify({'linear' : str(roundlpredict), 'decision' : str(rounddecpredict)})
 
- 
 @application.route('/forum', methods = ['POST', 'GET'])
 @login_required
 def forum():
